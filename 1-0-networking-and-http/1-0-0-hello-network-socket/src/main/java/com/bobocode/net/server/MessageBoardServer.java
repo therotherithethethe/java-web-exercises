@@ -15,15 +15,15 @@ import static com.bobocode.net.server.ServerUtil.*;
  * be processed one by one.
  */
 public class MessageBoardServer {
-    public static final String HOST = ServerUtil.getLocalHost();
-    public static final int PORT = 8899; // you can use any free port you want
+    public static final int PORT = 8899;
 
     public static void main(String[] args) throws IOException {
-        try (ServerSocket serverSocket = createServerSocket(PORT)) {
+        try (ServerSocket serverSocket = ServerUtil.createServerSocket(PORT)) {
+            System.out.println("Server started. Listening on port " + PORT);
             while (true) {
-                try (Socket clientSocket = acceptClientSocket(serverSocket)) {
-                    String message = readMessageFromSocket(clientSocket);
-                    printMessage(clientSocket, message);
+                try (Socket clientSocket = ServerUtil.acceptClientSocket(serverSocket)) {
+                    String message = ServerUtil.readMessageFromSocket(clientSocket);
+                    ServerUtil.printMessage(clientSocket, message);
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.bobocode.net.client;
 
 import com.bobocode.net.server.MessageBoardServer;
+import java.io.IOException;
 import lombok.SneakyThrows;
 
 import java.io.BufferedReader;
@@ -21,19 +22,18 @@ import static com.bobocode.net.client.ClientUtil.*;
  * If so, you will need to specify corresponding HOST and POST values below.
  */
 public class MessageBoardClient {
-    private static final String SERVER_ADDRESS = MessageBoardServer.HOST;
-    private static final int SERVER_PORT = MessageBoardServer.PORT;
+    private static final String SERVER_ADDRESS = "127.0.0.1";
+    private static final int SERVER_PORT = 8899;
 
-    @SneakyThrows
-    public static void main(String[] args) {
-        try (BufferedReader reader = openConsoleReader()) {
-            String message = readMessage(reader);
+    public static void main(String[] args) throws IOException {
+        try (BufferedReader reader = ClientUtil.openConsoleReader()) {
+            String message = ClientUtil.readMessage(reader);
 
             while (!message.equals("q")) {
-                try (Socket socket = openSocket(SERVER_ADDRESS, SERVER_PORT)) {
-                    writeToSocket(message, socket);
+                try (Socket socket = ClientUtil.openSocket(SERVER_ADDRESS, SERVER_PORT)) {
+                    ClientUtil.writeToSocket(message, socket);
                 }
-                message = readMessage(reader);
+                message = ClientUtil.readMessage(reader);
             }
         }
     }
